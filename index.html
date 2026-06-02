@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Máy Tính Sữa Gạo</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f5f7fa;
+    margin:0;
+    padding:20px;
+}
+
+.container{
+    max-width:600px;
+    margin:auto;
+    background:white;
+    border-radius:16px;
+    padding:24px;
+    box-shadow:0 4px 12px rgba(0,0,0,.1);
+}
+
+h1{
+    text-align:center;
+    margin-bottom:10px;
+}
+
+.subtitle{
+    text-align:center;
+    color:#666;
+    margin-bottom:20px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    font-size:18px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    box-sizing:border-box;
+}
+
+.buttons{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    margin:15px 0;
+}
+
+.buttons button{
+    padding:10px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    background:#4f46e5;
+    color:white;
+}
+
+.result{
+    background:#f8fafc;
+    padding:12px;
+    border-radius:10px;
+    margin-top:10px;
+    display:flex;
+    justify-content:space-between;
+}
+
+.total{
+    margin-top:15px;
+    padding:15px;
+    background:#e0f2fe;
+    border-radius:10px;
+    text-align:center;
+    font-weight:bold;
+}
+
+.copy{
+    width:100%;
+    margin-top:15px;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    background:#16a34a;
+    color:white;
+    cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<h1>🥛 Máy Tính Sữa Gạo</h1>
+<div class="subtitle">
+Nhập số lít thành phẩm mong muốn
+</div>
+
+<input type="number" id="lit" step="0.1" placeholder="Ví dụ: 2.5">
+
+<div class="buttons">
+<button onclick="setLit(1)">1L</button>
+<button onclick="setLit(2)">2L</button>
+<button onclick="setLit(5)">5L</button>
+<button onclick="setLit(10)">10L</button>
+</div>
+
+<div class="result">
+<span>🌾 Gạo tẻ</span>
+<strong id="gaote">0 g</strong>
+</div>
+
+<div class="result">
+<span>🌾 Gạo nếp</span>
+<strong id="gaonep">0 g</strong>
+</div>
+
+<div class="result">
+<span>💧 Nước</span>
+<strong id="nuoc">0 ml</strong>
+</div>
+
+<div class="result">
+<span>🥛 Sữa</span>
+<strong id="sua">0 ml</strong>
+</div>
+
+<div class="total">
+Tổng chất lỏng: <span id="tong">0 ml</span>
+</div>
+
+<button class="copy" onclick="copyRecipe()">
+📋 Sao chép công thức
+</button>
+
+</div>
+
+<script>
+
+const input = document.getElementById("lit");
+
+input.addEventListener("input", calculate);
+
+function formatVolume(v){
+    if(v >= 1000){
+        return (v/1000).toFixed(2) + " L";
+    }
+    return Math.round(v) + " ml";
+}
+
+function calculate(){
+
+    const lit = parseFloat(input.value) || 0;
+
+    const gaoTe = lit * 30;
+    const gaoNep = lit * 30;
+    const nuoc = lit * 700;
+    const sua = lit * 440;
+
+    document.getElementById("gaote").textContent =
+        gaoTe.toFixed(1) + " g";
+
+    document.getElementById("gaonep").textContent =
+        gaoNep.toFixed(1) + " g";
+
+    document.getElementById("nuoc").textContent =
+        formatVolume(nuoc);
+
+    document.getElementById("sua").textContent =
+        formatVolume(sua);
+
+    document.getElementById("tong").textContent =
+        formatVolume(nuoc + sua);
+}
+
+function setLit(v){
+    input.value = v;
+    calculate();
+}
+
+function copyRecipe(){
+
+    const text =
+`Sữa thành phẩm: ${input.value || 0} L
+
+Gạo tẻ: ${document.getElementById("gaote").textContent}
+Gạo nếp: ${document.getElementById("gaonep").textContent}
+Nước: ${document.getElementById("nuoc").textContent}
+Sữa: ${document.getElementById("sua").textContent}`;
+
+    navigator.clipboard.writeText(text);
+    alert("Đã sao chép!");
+}
+
+</script>
+
+</body>
+</html>
